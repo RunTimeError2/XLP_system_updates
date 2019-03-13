@@ -1,0 +1,56 @@
+# Experimental configuration for testing ELK (ElasticSearch, Logstash, Kibana)
+
+version: '2'
+services:
+  mariadb:
+    image: mariadb:10.3
+    restart: always
+    environment:
+    - MYSQL_ROOT_PASSWORD=W2qgpsLtQt
+    volumes:
+    - /data/xlpsystem/mariadb/:/var/lib/mysql
+    
+  mediawiki:
+    image: xlpsystem/mediawiki:20180827140844
+    restart: always
+    ports:
+    - 81:80
+    volumes:
+    - /data/xlpsystem/mediawiki:/xlp_data
+    - /data/xlpsystem/mediawiki_dev:/xlp_dev
+    depends_on:
+    - mariadb
+    - elasticsearch
+    
+  elasticsearch:
+    image: xlpsystem/elasticsearch:20180822142218
+    volumes:
+    - /data/xlpsystem/elasticsearch:/usr/share/elasticsearch/data
+    environment:
+    - discovery.type=single-node
+    - bootstrap.memory_lock=true
+    - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    
+  kibana:
+    image: xlpsystem/kibana:20180821233221
+    ports:
+    - 84:5601
+    depends_on:
+    - elasticsearch
+    
+  logstash:
+    image: docker.elastic.co/logstash/logstash:5.6.10
+    volumes:
+    - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+    - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+    ports:
+    - "5000:5000"
+    - "9600:9600"
+    environment:
+    - LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    depends_on:
+    - elasticsearch
