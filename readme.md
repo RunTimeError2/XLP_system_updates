@@ -27,3 +27,6 @@ These updates will be in the form of
 
 - Extension:Capiunto and Extension:Cite for Mediawiki
 - Add Logstash to form an ELK structure
+- Cluster deployment using Kubernetes, Istio, Apache:Kafka or other tools
+- After Kubernetes, add Brigade and its visualizing tool Kashti
+- more to be added
