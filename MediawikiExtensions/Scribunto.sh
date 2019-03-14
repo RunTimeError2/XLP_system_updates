@@ -16,7 +16,7 @@ if [ -z "$conf_str" ]; then
 	echo "$wgScribuntoDefaultEngine = 'luastandalone';" >> /data/xlpsystem/mediawiki/LocalSettings.php
 	# Set type to httpd_sys_script_exec_t if SELinux is enforced:
 	#chcon -R -t httpd_sys_script_exec_t /data/xlpsystem/mediawiki_dev/extensions/Scribunto/includes/engines/LuaStandalone/binaries
-fi
+fis
 
 if [ -n "$conf_str" ]; then
     echo 'Configuration already written to LocalSettings.php.'
