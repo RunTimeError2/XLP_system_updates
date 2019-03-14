@@ -22,6 +22,7 @@ services:
     depends_on:
     - mariadb
     - matomo
+    - parsoid
     - elasticsearch
     
   wordpress:
