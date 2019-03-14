@@ -21,7 +21,8 @@ These updates will be in the form of
 
 ## Updates finished
 
-- to be added
+- Several .yml configurations, respectively containing different combinations of containers.
+- Extensions: VisualEditor, Cite
 
 ## Updates to be done
 

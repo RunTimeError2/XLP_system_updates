@@ -114,7 +114,7 @@ services:
 
   parsoid:
     image: thenets/parsoid:0.9.0
-    restart:always
+    restart: always
     environment:
     - PARSOID_DOMAIN_localhost=http://mediawiki/api.php
     ports:
