@@ -23,11 +23,14 @@ These updates will be in the form of
 
 - Several .yml configurations, respectively containing different combinations of containers.
 - Extensions: VisualEditor, Cite
+- Logstash: Container (conf. in docker-compose.yml), Configuration(supporting tcp, file, jdbc) 
+and incremental synchonization of multiple tables
 
 ## Updates to be done
 
-- Extension:Capiunto and Extension:Cite for Mediawiki
-- Add Logstash to form an ELK structure
+- Extension:SemanticMediawiki (a lot of problems)
+- Extension:HavardReferences (failed)
+- Extension:Math (should support LaTeX, including drawing graphs)
 - Cluster deployment using Kubernetes, Istio, Apache:Kafka or other tools
 - After Kubernetes, add Brigade and its visualizing tool Kashti
 - more to be added
