@@ -26,12 +26,12 @@ These updates will be in the form of
 - Extensions: VisualEditor, Cite
 - Logstash: Container (conf. in docker-compose.yml), Configuration(supporting tcp, file, jdbc) 
 and incremental synchonization of multiple tables
+- Extension:Math (support LaTeX, but only have documents on http://toyhouse.cc:81/index.php/%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E4%B8%8ELaTeX%E7%9A%84%E6%94%AF%E6%8C%81)
 
 ## Updates to be done
 
 - Extension:SemanticMediawiki (a lot of problems)
 - Extension:HavardReferences (failed)
-- Extension:Math (should support LaTeX, including drawing graphs)
 - Cluster deployment using Kubernetes, Istio, Apache:Kafka or other tools
 - After Kubernetes, add Brigade and its visualizing tool Kashti
 - more to be added
