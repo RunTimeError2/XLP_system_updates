@@ -18,6 +18,7 @@ These updates will be in the form of
 
 - All data are mounted at /data/xlpsystem/
 - The system is set up using https://github.com/RunTimeError2/XLP_AutoDeploy where the docker-compose.yml file is located at directory 'XLP_AutoDeploy' so that the names of containers have the prefix 'xlp_autodeploy_'
+- If you set up the system using this repository, the prefix of containers would be 'xlp_system_updates_', please take care of it.
 
 ## Updates finished
 
