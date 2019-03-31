@@ -1,5 +1,5 @@
 # Standard configuration
-# Including MariaDB, MediaWiki, WordPress, Matomo, ElasticSearch, Kibana, Phabricator
+# Including MariaDB, MediaWiki, Logstash, ElasticSearch, Kibana
 # that are frequently-used micro-services
 
 version: '2'
@@ -24,30 +24,23 @@ services:
     - mariadb
     - matomo
     - elasticsearch
-    
-  wordpress:
-    image: xlpsystem/wordpress:20180820185725
-    restart: always
+  
+  logstash:
+    build:
+      context: logstash/
+      args:
+        ELK_VERSION: 6.6.1
+    volumes:
+    - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+    - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+    - ./logstash/depends:/depends
+    ports:
+    - "5000:5000"
+    - "9600:9600"
     environment:
-    - WORDPRESS_DB_HOST=mariadb
-    - WORDPRESS_DB_PASSWORD=W2qgpsLtQt
-    ports:
-    - 83:80
-    volumes:
-    - /data/xlpsystem/wordpress:/var/www/html
+    - LS_JAVA_OPTS=-Xmx256m -Xms256m
     depends_on:
-    - mariadb
-    - matomo
-    
-  matomo:
-    image: xlpsystem/matomo:20180820163542
-    restart: always
-    ports:
-    - 82:80
-    volumes:
-    - /data/xlpsystem/matomo:/var/www/html
-    depends_on:
-    - mariadb
+    - elasticsearch
     
   elasticsearch:
     image: xlpsystem/elasticsearch:20180822142218
@@ -68,34 +61,3 @@ services:
     - 84:5601
     depends_on:
     - elasticsearch
-    
-  phabricator-mysql:
-    restart: always
-    volumes:
-     - /data/xlpsystem/phabricator/data/mysql:/var/lib/mysql
-     - /data/xlpsystem/phabricator/config/mysql:/etc/mysql
-    image: mysql:5.7.14
-    environment:
-     - MYSQL_ROOT_PASSWORD=phabricator
-
-  phabricator:
-    restart: always
-    ports:
-     - "10443:443"
-     - "85:80"
-     - "10022:22"
-    volumes:
-     - /data/xlpsystem/phabricator/repos:/repos
-     - /data/xlpsystem/phabricator/extensions:/data/phabricator/phabricator/src/extensions
-    depends_on:
-     - phabricator-mysql
-    links:
-     - phabricator-mysql
-    environment:
-     - MYSQL_HOST=phabricator-mysql
-     - MYSQL_USER=root
-     - MYSQL_PASS=phabricator
-     - PHABRICATOR_REPOSITORY_PATH=/repos
-     - PHABRICATOR_HOST=cd.toyhouse.cc:85
-     - ENABLE_APCU=true
-    image: redpointgames/phabricator

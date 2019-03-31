@@ -113,22 +113,9 @@ services:
     - MYSQL_USER=root
     - MYSQL_PASS=phabricator
     - PHABRICATOR_REPOSITORY_PATH=/repos
-    - PHABRICATOR_HOST=cd.toyhouse.cc:85
+    - PHABRICATOR_HOST=domain.toyhouse.cc:85
     - ENABLE_APCU=true
     image: redpointgames/phabricator
-
-  logstash:
-    image: docker.elastic.co/logstash/logstash:5.6.10
-    volumes:
-    - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
-    - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
-    ports:
-    - 5000:5000
-    - 9600:9600
-    environment:
-    - LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-    depends_on:
-    - elasticsearch
 
   parsoid:
     image: thenets/parsoid:0.9.0
