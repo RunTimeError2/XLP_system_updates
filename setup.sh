@@ -30,7 +30,7 @@ else
 fi
 
 which nginx
-if [$? -ne 0]; then
+if [ $? -ne 0 ]; then
 	echo 'Nginx not installed yet. Installing nginx...'
 	apt-get install nginx
 else
