@@ -11,8 +11,8 @@ else
 fi
 
 echo 'Cloning repository...'
-mkdir /var/www
-git clone ${repo_url} /var/www/
+mkdir /var/www/XLP_landingpage
+git clone ${repo_url} /var/www/XLP_landingpage/
 
 echo 'Copying configuration...'
 cp /var/www/XLP_landingpage/XLP_landingpage.conf /etc/nginx/sites-available/default
@@ -21,3 +21,5 @@ echo 'Enabling landingpage...'
 service nginx restart
 
 echo 'Landing page deployed. Please edit file /etc/nginx/sites-available/default and write ip address of this machine.'
+cat /etc/nginx/sites-available/default
+echo '===== Replace the ip address applied in rewrite with your own.'

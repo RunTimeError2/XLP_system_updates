@@ -32,7 +32,7 @@ fi
 which nginx
 if [ $? -ne 0 ]; then
 	echo 'Nginx not installed yet. Installing nginx...'
-	apt-get install nginx
+	apt-get install nginx -y
 else
 	echo 'Nginx already installed.'
 fi
