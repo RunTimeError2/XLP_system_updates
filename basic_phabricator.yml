@@ -1,0 +1,53 @@
+# Basic configuration for debugging phabricator (contains only mariadb, mediawiki, phabricator), requires a domain name
+
+version: '2'
+services:
+  mariadb:
+    image: mariadb:10.3
+    restart: always
+    environment:
+    - MYSQL_ROOT_PASSWORD=W2qgpsLtQt
+    volumes:
+    - /data/xlpsystem/mariadb/:/var/lib/mysql
+    
+  mediawiki:
+    image: xlpsystem/mediawiki:20180827140844
+    restart: always
+    ports:
+    - 81:80
+    volumes:
+    - /data/xlpsystem/mediawiki:/xlp_data
+    - /data/xlpsystem/mediawiki_dev:/xlp_dev
+    depends_on:
+    - mariadb
+    
+  phabricator-mysql:
+    restart: always
+    volumes:
+    - /data/xlpsystem/phabricator/data/mysql:/var/lib/mysql
+    - /data/xlpsystem/phabricator/config/mysql:/etc/mysql
+    image: mysql:5.7.14
+    environment:
+    - MYSQL_ROOT_PASSWORD=phabricator
+
+  phabricator:
+    restart: always
+    ports:
+    - "10443:443"
+    - "85:80"
+    - "10022:22"
+    volumes:
+    - /data/xlpsystem/phabricator/repos:/repos
+    - /data/xlpsystem/phabricator/extensions:/data/phabricator/phabricator/src/extensions
+    depends_on:
+    - phabricator-mysql
+    links:
+    - phabricator-mysql
+    environment:
+    - MYSQL_HOST=phabricator-mysql
+    - MYSQL_USER=root
+    - MYSQL_PASS=phabricator
+    - PHABRICATOR_REPOSITORY_PATH=/repos
+    - PHABRICATOR_HOST=domain.toyhouse.cc:85
+    - ENABLE_APCU=true
+    image: redpointgames/phabricator

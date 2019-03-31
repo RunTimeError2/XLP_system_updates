@@ -1,6 +1,6 @@
 # Standard configuration
-# Including MariaDB, MediaWiki, Logstash, ElasticSearch, Kibana
-# that are frequently-used micro-services
+# Including MariaDB, MediaWiki, Matomo, Logstash, ElasticSearch, Kibana
+# Contains frequently-used micro-services of a basic XLP system
 
 version: '2'
 services:
@@ -24,6 +24,17 @@ services:
     - mariadb
     - matomo
     - elasticsearch
+    - parsoid
+    
+  matomo:
+    image: xlpsystem/matomo:20180820163542
+    restart: always
+    ports:
+    - 82:80
+    volumes:
+    - /data/xlpsystem/matomo:/var/www/html
+    depends_on:
+    - mariadb
   
   logstash:
     build:
@@ -41,6 +52,14 @@ services:
     - LS_JAVA_OPTS=-Xmx256m -Xms256m
     depends_on:
     - elasticsearch
+  
+  parsoid:
+    image: thenets/parsoid:0.9.0
+    restart: always
+    environment:
+    - PARSOID_DOMAIN_localhost=http://mediawiki/api.php
+    ports:
+    - 8000:8000
     
   elasticsearch:
     image: xlpsystem/elasticsearch:20180822142218
