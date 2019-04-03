@@ -1,0 +1,126 @@
+# Full configuration
+# Including all micro-services needed
+
+version: '2'
+services:
+  mariadb:
+    image: mariadb:10.3
+    restart: always
+    environment:
+    - MYSQL_ROOT_PASSWORD=W2qgpsLtQt
+    volumes:
+    - /data/xlpsystem/mariadb/:/var/lib/mysql
+    
+  mediawiki:
+    image: xlpsystem/mediawiki:20180827140844
+    restart: always
+    ports:
+    - 81:80
+    volumes:
+    - /data/xlpsystem/mediawiki:/xlp_data
+    - /data/xlpsystem/mediawiki_dev:/xlp_dev
+    depends_on:
+    - mariadb
+    - matomo
+    - parsoid
+    - elasticsearch
+    
+  wordpress:
+    image: xlpsystem/wordpress:20180820185725
+    restart: always
+    environment:
+    - WORDPRESS_DB_HOST=mariadb
+    - WORDPRESS_DB_PASSWORD=W2qgpsLtQt
+    ports:
+    - 83:80
+    volumes:
+    - /data/xlpsystem/wordpress:/var/www/html
+    depends_on:
+    - mariadb
+    - matomo
+    
+  matomo:
+    image: xlpsystem/matomo:20180820163542
+    restart: always
+    ports:
+    - 82:80
+    volumes:
+    - /data/xlpsystem/matomo:/var/www/html
+    depends_on:
+    - mariadb
+    
+  elasticsearch:
+    image: xlpsystem/elasticsearch:20180822142218
+    volumes:
+    - /data/xlpsystem/elasticsearch:/usr/share/elasticsearch/data
+    environment:
+    - discovery.type=single-node
+    - bootstrap.memory_lock=true
+    - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+        
+  logstash:
+    build:
+      context: logstash/
+      args:
+        ELK_VERSION: 6.6.1
+    volumes:
+    - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+    - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+    - ./logstash/depends:/depends
+    ports:
+    - "5000:5000"
+    - "9600:9600"
+    environment:
+    - LS_JAVA_OPTS=-Xmx256m -Xms256m
+    depends_on:
+    - elasticsearch
+    
+  kibana:
+    image: xlpsystem/kibana:20180821233221
+    ports:
+    - 84:5601
+    depends_on:
+    - elasticsearch
+    
+  phabricator-mysql:
+    restart: always
+    volumes:
+    - /data/xlpsystem/phabricator/data/mysql:/var/lib/mysql
+    - /data/xlpsystem/phabricator/config/mysql:/etc/mysql
+    image: mysql:5.7.14
+    environment:
+    - MYSQL_ROOT_PASSWORD=phabricator
+
+  phabricator:
+    restart: always
+    ports:
+    - "10443:443"
+    - "85:80"
+    - "10022:22"
+    volumes:
+    - /data/xlpsystem/phabricator/repos:/repos
+    - /data/xlpsystem/phabricator/extensions:/data/phabricator/phabricator/src/extensions
+    depends_on:
+    - phabricator-mysql
+    links:
+    - phabricator-mysql
+    environment:
+    - MYSQL_HOST=phabricator-mysql
+    - MYSQL_USER=root
+    - MYSQL_PASS=phabricator
+    - PHABRICATOR_REPOSITORY_PATH=/repos
+    - PHABRICATOR_HOST=domain.toyhouse.cc:85
+    - ENABLE_APCU=true
+    image: redpointgames/phabricator
+
+  parsoid:
+    image: thenets/parsoid:0.9.0
+    restart: always
+    environment:
+    - PARSOID_DOMAIN_localhost=http://mediawiki/api.php
+    ports:
+    - 8000:8000
