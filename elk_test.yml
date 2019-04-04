@@ -55,10 +55,11 @@ services:
     - elasticsearch
     
   logstash:
-    build:
-      context: logstash/
-      args:
-        ELK_VERSION: 6.6.1
+    #build:
+    #  context: logstash/
+    #  args:
+    #    ELK_VERSION: 6.6.1
+    image: docker.elastic.co/logstash/logstash-oss:6.6.1
     volumes:
     - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
     - ./logstash/pipeline:/usr/share/logstash/pipeline:ro

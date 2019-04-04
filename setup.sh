@@ -45,6 +45,8 @@ chmod -R 777 /data/xlpsystem
 echo 'Copying rsync configuration...'
 cp rsync/pw.passwd /data/pw.passwd
 cp rsync/pw.password /data/pw.password
+chmod 600 /data/pw.passwd
+chmod 600 /data/pw.password
 cp rsync/rsyncd.conf /etc/rsyncd.conf
 
 echo 'Environment successfully established.'
