@@ -125,3 +125,16 @@ services:
     - PARSOID_DOMAIN_localhost=http://mediawiki/api.php
     ports:
     - 8000:8000
+
+  nexus:
+    image: sonatype/nexus3
+    restart: always
+    ports:
+    - 8081:8081
+    - 8082:8082
+    - 8083:8083
+    # more ports can be added if required
+    volumes:
+    - /data/nexus_data:/nexus-data:rw
+    # Do not forget to give read and write access to this directory
+    
