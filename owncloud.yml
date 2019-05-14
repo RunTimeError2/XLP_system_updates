@@ -1,0 +1,17 @@
+version: '2'
+services:
+  mysql:
+    image: mysql
+    restart: always
+    environment:
+    - MYSQL_ROOT_PASSWORD=W2qgpsLtQt
+    volumes:
+    - /data/owncloud/mysql:/var/lib/mysql
+  owncloud:
+    image: owncloud
+    restart: always
+    volumes:
+    - /data/owncloud/owncloud:/var/www/html/data
+    ports:
+    - 8086:80
+    
