@@ -11,7 +11,8 @@ services:
     - /data/xlpsystem/mariadb/:/var/lib/mysql
     
   mediawiki:
-    image: xlpsystem/mediawiki:20180827140844
+    #image: xlpsystem/mediawiki:20180827140844
+    image: mediawiki:20190516
     restart: always
     ports:
     - 81:80
@@ -55,10 +56,6 @@ services:
     - elasticsearch
     
   logstash:
-    #build:
-    #  context: logstash/
-    #  args:
-    #    ELK_VERSION: 6.6.1
     image: docker.elastic.co/logstash/logstash-oss:6.6.1
     volumes:
     - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro

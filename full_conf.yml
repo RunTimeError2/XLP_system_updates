@@ -12,7 +12,8 @@ services:
     - /data/xlpsystem/mariadb/:/var/lib/mysql
     
   mediawiki:
-    image: xlpsystem/mediawiki:20180827140844
+    #image: xlpsystem/mediawiki:20180827140844
+    image: mediawiki:20190516
     restart: always
     ports:
     - 81:80
@@ -63,10 +64,6 @@ services:
         hard: -1
         
   logstash:
-    #build:
-    #  context: logstash/
-    #  args:
-    #    ELK_VERSION: 6.6.1
     image: docker.elastic.co/logstash/logstash-oss:6.6.1
     volumes:
     - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
@@ -114,7 +111,7 @@ services:
     - MYSQL_USER=root
     - MYSQL_PASS=phabricator
     - PHABRICATOR_REPOSITORY_PATH=/repos
-    - PHABRICATOR_HOST=domain.toyhouse.cc:85
+    - PHABRICATOR_HOST=local.xlp.pub:85
     - ENABLE_APCU=true
     image: redpointgames/phabricator
 
@@ -126,15 +123,15 @@ services:
     ports:
     - 8000:8000
 
-  nexus:
-    image: sonatype/nexus3
-    restart: always
-    ports:
-    - 8081:8081
-    - 8082:8082
-    - 8083:8083
-    # more ports can be added if required
-    volumes:
-    - /data/nexus_data:/nexus-data:rw
-    # Do not forget to give read and write access to this directory
+  #nexus:
+  #  image: sonatype/nexus3
+  #  restart: always
+  #  ports:
+  #  - 8081:8081
+  #  - 8082:8082
+  #  - 8083:8083
+  # more ports can be added if required
+  #  volumes:
+  #  - /data/nexus_data:/nexus-data:rw
+  # Do not forget to give read and write access to this directory
     

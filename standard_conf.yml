@@ -13,7 +13,8 @@ services:
     - /data/xlpsystem/mariadb/:/var/lib/mysql
     
   mediawiki:
-    image: xlpsystem/mediawiki:20180827140844
+    #image: xlpsystem/mediawiki:20180827140844
+    image: mediawiki:20190516
     restart: always
     ports:
     - 81:80

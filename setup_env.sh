@@ -50,3 +50,4 @@ chmod 600 /data/pw.password
 cp rsync/rsyncd.conf /etc/rsyncd.conf
 
 echo 'Environment successfully established.'
+
