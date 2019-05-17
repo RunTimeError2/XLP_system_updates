@@ -111,7 +111,7 @@ services:
     - MYSQL_USER=root
     - MYSQL_PASS=phabricator
     - PHABRICATOR_REPOSITORY_PATH=/repos
-    - PHABRICATOR_HOST=local.xlp.pub:85
+    - PHABRICATOR_HOST=vm.xlp.pub:85
     - ENABLE_APCU=true
     image: redpointgames/phabricator
 

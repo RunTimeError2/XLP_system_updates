@@ -108,14 +108,14 @@ docker tag ${nexus_host_hosted}/mediawiki:20190516 mediawiki:20190516
 echo 'Pulling data from server...'
 rsync -vazu --progress --delete root@${server_ip}::xlpdata /data/xlpsystem/ --password-file=/data/pw.passwd
 # rm -r /data/xlpsystem/elasticsearch
-chmod -R 777 /data/
+chmod -R 777 /data/xlpsystem
 echo 'Replacing configuration...'
 mv -f /data/xlpsystem/LocalSettings.php /data/xlpsystem/mediawiki/LocalSettings.php
 mv -f /data/xlpsystem/config.ini.php /data/xlpsystem/matomo/config/config.ini.php
 
 # Edit hosts
 echo 'Editing hosts'
-sed -i '1i\127.0.0.1   vm.xlp.pub'
+sed -i '1i\127.0.0.1   vm.xlp.pub' /etc/hosts
 
 # Install TeamViewer
 echo 'Installing TeamViewer...'
@@ -138,5 +138,7 @@ service nginx restart
 #rm /etc/apt/sources.list
 #mv /etc/apt/sources.list.bak /etc/apt/sources.list
 #apt-get update
+echo 'Awaiting containers...'
+sleep 30s
 
 echo 'Done.'
